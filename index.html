@@ -160,17 +160,44 @@
     h1 {
         margin-left: -50%;
     }
+    #section1 {
+        background-image: url('img/mv.jpg');
+        background-size: cover;       /* 画面いっぱいに拡大縮小 */
+        background-position: center;  /* 中央を基準に配置 */
+        background-repeat: no-repeat;
+        animation: bgMove 10s linear infinite;
+    }
+    @keyframes bgMove {
+    0% {
+        background-position: center center;
+    }
+    50% {
+        background-position: center 55%; /* 少しだけ下に */
+    }
+    100% {
+        background-position: center center;
+    }
+}
 
     @media (max-width: 768px) {
+      header {
+        padding: 10px 20px 10px 10px;
+      }
       .nav {
         display: none;
       }
       .hamburger {
         display: flex;
       }
+      .logo img {
+        width: 60vw;
+      }
       h1 {
         font-size: 32px;
-        margin-left: -20vw;
+        margin-left: -15vw;
+      }
+      #section1 {
+        background-image: url('img/mv.jpg');
       }
     }
   </style>
