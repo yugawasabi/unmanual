@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>スライドLP</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: sans-serif;
+    }
+
+    main {
+      height: 100vh;
+      overflow: visible;
+      position: relative;
+    }
+
+    .wrapper {
+      height: 100%;
+      position: relative;
+    }
+
+    section {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2rem;
+      color: #fff;
+      opacity: 0;
+      transform: translateY(100%);
+      transition: transform 0.8s ease-in-out, opacity 0.4s ease;
+      z-index: 0;
+    }
+
+    section.active {
+      opacity: 1;
+      z-index: 1;
+    }
+
+    #section1 { background: #777; }
+    #section2 { background: #999; }
+    #section3 { background: #333; }
+    #section4 { background: #600; }
+    #section5 { background: #002366; }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      color: white;
+    }
+
+    .logo {
+      font-weight: bold;
+    }
+
+    .nav {
+      display: flex;
+      gap: 40px;
+    }
+
+    .nav a,
+    .join-btn {
+      color: white;
+      text-decoration: none;
+      padding: 10px 10px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    a.join-btn {
+      background: transparent;
+      border-radius: 40px;
+      border: 1px solid white;
+      padding: 10px 50px;
+    }
+
+    .dot-nav {
+      position: fixed;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 999;
+    }
+
+    .dot {
+      width: 3px;
+      height: 10px;
+      border-radius: 10px;
+      background: #ccc;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .dot.active {
+      background: #fff;
+      width: 3px;
+      height: 40px;
+      transform: scale(1.4);
+      margin: 5px 0;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .hamburger span {
+      width: 20px;
+      height: 2px;
+      background: white;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 50px;
+      right: 20px;
+      background: rgba(0,0,0,0.9);
+      padding: 20px;
+      border-radius: 10px;
+      z-index: 999;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .mobile-menu.show {
+      display: flex;
+    }
+
+    .mobile-menu a {
+      color: white;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+    h1 {
+        margin-left: -50%;
+    }
+
+    @media (max-width: 768px) {
+      .nav {
+        display: none;
+      }
+      .hamburger {
+        display: flex;
+      }
+      h1 {
+        font-size: 32px;
+        margin-left: -20vw;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+        <img src="img/logo-w.png" alt="logo">
+    </div>
+    <nav class="nav">
+      <a data-index="0">TOP</a>
+      <a data-index="1">UnManualとは</a>
+      <a data-index="2">Schedule</a>
+      <a data-index="3">参加特典</a>
+      <a class="join-btn" data-index="4">参加する</a>
+    </nav>
+    <div class="hamburger" id="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a data-index="0">TOP</a>
+      <a data-index="1">UnManualとは</a>
+      <a data-index="2">スケジュール</a>
+      <a data-index="3">参加特典</a>
+      <a data-index="4">参加する</a>
+    </div>
+  </header>
+
+  <div class="dot-nav">
+    <div class="dot active" data-index="0"></div>
+    <div class="dot" data-index="1"></div>
+    <div class="dot" data-index="2"></div>
+    <div class="dot" data-index="3"></div>
+    <div class="dot" data-index="4"></div>
+  </div>
+
+  <main id="mainContainer">
+    <div class="wrapper" id="wrapper">
+      <section id="section1" class="active" style="transform: translateY(0); opacity: 1;">
+        <h1>
+            決まりきった日常に<br>
+            UnManualな体験を
+        </h1>
+      </section>
+      <section id="section2">
+        section2
+      </section>
+      <section id="section3">
+        section3
+      </section>
+      <section id="section4">
+        section4
+      </section>
+      <section id="section5">
+        section5
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const sections = document.querySelectorAll("section");
+    const dots = document.querySelectorAll(".dot");
+    const navLinks = document.querySelectorAll(".nav a, .mobile-menu a");
+    const hamburger = document.getElementById("hamburger");
+    const mobileMenu = document.getElementById("mobileMenu");
+
+    let currentIndex = 0;
+    let isScrolling = false;
+
+    function updateView(index) {
+      if (index < 0 || index >= sections.length || isScrolling || index === currentIndex) return;
+      isScrolling = true;
+
+      const direction = index > currentIndex ? 1 : -1;
+      const current = sections[currentIndex];
+      const next = sections[index];
+
+      // 初期化
+      next.classList.add("active");
+      next.style.transition = "none";
+      next.style.transform = `translateY(${100 * direction}%)`;
+      next.style.opacity = "1";
+
+      void next.offsetWidth; // Reflow
+
+      // アニメーション開始
+      next.style.transition = "transform 0.8s ease-in-out";
+      current.style.transition = "transform 0.8s ease-in-out";
+      next.style.transform = "translateY(0%)";
+      current.style.transform = `translateY(${-100 * direction}%)`;
+
+      dots.forEach(dot => dot.classList.remove("active"));
+      dots[index].classList.add("active");
+
+      setTimeout(() => {
+        current.classList.remove("active");
+        current.style.transition = "";
+        current.style.transform = "";
+        current.style.opacity = "0";
+
+        next.style.transition = "";
+        next.style.transform = "translateY(0)";
+        currentIndex = index;
+        isScrolling = false;
+      }, 850);
+    }
+
+    function onWheel(e) {
+      e.preventDefault();
+      if (isScrolling) return;
+      if (e.deltaY > 0) updateView(currentIndex + 1);
+      else updateView(currentIndex - 1);
+    }
+
+    function onKey(e) {
+      if (isScrolling) return;
+      if (e.key === "ArrowDown") updateView(currentIndex + 1);
+      else if (e.key === "ArrowUp") updateView(currentIndex - 1);
+    }
+
+    dots.forEach(dot => {
+      dot.addEventListener("click", () => {
+        const i = parseInt(dot.dataset.index);
+        updateView(i);
+      });
+    });
+
+    navLinks.forEach(link => {
+      link.addEventListener("click", () => {
+        const i = parseInt(link.dataset.index);
+        updateView(i);
+        mobileMenu.classList.remove("show");
+      });
+    });
+
+    hamburger.addEventListener("click", () => {
+      mobileMenu.classList.toggle("show");
+    });
+
+    window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("keydown", onKey);
+  </script>
+
+</body>
+</html>
