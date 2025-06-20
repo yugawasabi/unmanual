@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>スライドLP</title>
   <style>
@@ -13,7 +13,7 @@
 
     html, body {
       height: 100%;
-      overflow: hidden;
+      overflow: auto; /* 修正: iOSでスクロール可能に */
       font-family: sans-serif;
     }
 
@@ -157,47 +157,33 @@
       text-decoration: none;
       font-size: 1rem;
     }
+
     h1 {
-        margin-left: -50%;
+      margin-left: -50%;
     }
+
     #section1 {
-        background-image: url('img/mv.jpg');
-        background-size: cover;       /* 画面いっぱいに拡大縮小 */
-        background-position: center;  /* 中央を基準に配置 */
-        background-repeat: no-repeat;
-        animation: bgMove 10s linear infinite;
+      background-image: url('img/mv.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      animation: bgMove 10s linear infinite;
     }
+
     @keyframes bgMove {
-    0% {
-        background-position: center center;
+      0% { background-position: center center; }
+      50% { background-position: center 55%; }
+      100% { background-position: center center; }
     }
-    50% {
-        background-position: center 55%; /* 少しだけ下に */
-    }
-    100% {
-        background-position: center center;
-    }
-}
 
     @media (max-width: 768px) {
-      header {
-        padding: 10px 20px 10px 10px;
-      }
-      .nav {
-        display: none;
-      }
-      .hamburger {
-        display: flex;
-      }
-      .logo img {
-        width: 60vw;
-      }
+      header { padding: 10px 20px 10px 10px; }
+      .nav { display: none; }
+      .hamburger { display: flex; }
+      .logo img { width: 60vw; }
       h1 {
         font-size: 32px;
         margin-left: -15vw;
-      }
-      #section1 {
-        background-image: url('img/mv.jpg');
       }
     }
   </style>
@@ -206,7 +192,7 @@
 
   <header>
     <div class="logo">
-        <img src="img/logo-w.png" alt="logo">
+      <img src="img/logo-w.png" alt="logo">
     </div>
     <nav class="nav">
       <a data-index="0">TOP</a>
@@ -216,9 +202,7 @@
       <a class="join-btn" data-index="4">参加する</a>
     </nav>
     <div class="hamburger" id="hamburger">
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
     </div>
     <div class="mobile-menu" id="mobileMenu">
       <a data-index="0">TOP</a>
@@ -240,23 +224,12 @@
   <main id="mainContainer">
     <div class="wrapper" id="wrapper">
       <section id="section1" class="active" style="transform: translateY(0); opacity: 1;">
-        <h1>
-            決まりきった日常に<br>
-            UnManualな体験を
-        </h1>
+        <h1>日常に<br>UnManualな体験を</h1>
       </section>
-      <section id="section2">
-        section2
-      </section>
-      <section id="section3">
-        section3
-      </section>
-      <section id="section4">
-        section4
-      </section>
-      <section id="section5">
-        section5
-      </section>
+      <section id="section2">section2</section>
+      <section id="section3">section3</section>
+      <section id="section4">section4</section>
+      <section id="section5">section5</section>
     </div>
   </main>
 
@@ -278,15 +251,13 @@
       const current = sections[currentIndex];
       const next = sections[index];
 
-      // 初期化
       next.classList.add("active");
       next.style.transition = "none";
       next.style.transform = `translateY(${100 * direction}%)`;
       next.style.opacity = "1";
 
-      void next.offsetWidth; // Reflow
+      void next.offsetWidth;
 
-      // アニメーション開始
       next.style.transition = "transform 0.8s ease-in-out";
       current.style.transition = "transform 0.8s ease-in-out";
       next.style.transform = "translateY(0%)";
@@ -321,6 +292,23 @@
       else if (e.key === "ArrowUp") updateView(currentIndex - 1);
     }
 
+    function onTouchEvents() {
+      let touchStartY = 0;
+      let touchEndY = 0;
+
+      window.addEventListener('touchstart', e => {
+        touchStartY = e.changedTouches[0].screenY;
+      });
+
+      window.addEventListener('touchend', e => {
+        touchEndY = e.changedTouches[0].screenY;
+        if (Math.abs(touchStartY - touchEndY) < 30) return;
+
+        if (touchStartY > touchEndY) updateView(currentIndex + 1);
+        else updateView(currentIndex - 1);
+      });
+    }
+
     dots.forEach(dot => {
       dot.addEventListener("click", () => {
         const i = parseInt(dot.dataset.index);
@@ -342,6 +330,7 @@
 
     window.addEventListener("wheel", onWheel, { passive: false });
     window.addEventListener("keydown", onKey);
+    onTouchEvents(); // ← 追加でSPスクロール対応
   </script>
 
 </body>
